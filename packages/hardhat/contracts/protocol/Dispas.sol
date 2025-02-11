@@ -38,6 +38,9 @@ contract Dispas is IDispas {
             // track total distribution
             distributedAmount += payment.amount;
 
+            // ensure distributed amount does not exceed the full msg.value
+            if (distributedAmount > msg.value) revert Dispas__InsufficientValue();
+
             // attempt transfer
             (bool success, ) = payment.recipient.call{ value: payment.amount }("");
             require(success, Dispas__TransferFailed(payment.recipient, payment.amount));
@@ -45,9 +48,6 @@ contract Dispas is IDispas {
             // emit event for successful payment
             emit PaymentSent(payment.recipient, payment.amount);
         }
-
-        // ensure the full msg.value is distributed
-        if (distributedAmount != msg.value) revert Dispas__InsufficientValue();
 
         // emit event for overall distribution
         emit FundsDistributed(msg.sender, msg.value);
