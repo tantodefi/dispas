@@ -1,31 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UniversalProfileProvider } from "./UniversalProfileProvider";
+import { Poppins } from "next/font/google";
+import { Header } from "./Header";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { useTheme } from "next-themes";
-import { Toaster } from "react-hot-toast";
 import { WagmiProvider } from "wagmi";
-import { Footer } from "~~/components/Footer";
-import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
+import { Provider as ChakraProvider } from "~~/components/ui/provider";
+import { UPProvider } from "~~/contexts/UPProviderContext";
+import { UniversalProfileProvider } from "~~/contexts/UniversalProfileContext";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+
+const font = Poppins({ subsets: ["latin"], weight: "300" });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
 
   return (
-    <>
-      <div className={`flex flex-col min-h-screen `}>
+    <html lang="en">
+      <body className={font.className}>
         <Header />
-        <main className="relative flex flex-col flex-1">{children}</main>
-        <Footer />
-      </div>
-      <Toaster />
-    </>
+        <ChakraProvider>{children}</ChakraProvider>
+      </body>
+    </html>
   );
 };
 
@@ -54,9 +55,11 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
           avatar={BlockieAvatar}
           theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
         >
-          <UniversalProfileProvider>
-            <ScaffoldEthApp>{children}</ScaffoldEthApp>
-          </UniversalProfileProvider>
+          <UPProvider>
+            <UniversalProfileProvider>
+              <ScaffoldEthApp>{children}</ScaffoldEthApp>
+            </UniversalProfileProvider>
+          </UPProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

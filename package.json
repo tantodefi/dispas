@@ -45,7 +45,13 @@
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "verify": "yarn hardhat:verify"
+    "verify": "yarn hardhat:verify",
+    "add:frontend": "yarn workspace @se-2/nextjs add",
+    "add:contract": "yarn workspace @se-2/hardhat add",
+    "remove:frontend": "yarn workspace @se-2/nextjs remove",
+    "remove:contract": "yarn workspace @se-2/hardhat remove",
+    "format:frontend": "yarn workspace @se-2/nextjs format",
+    "format:contract": "yarn workspace @se-2/hardhat format"
   },
   "devDependencies": {
     "husky": "~8.0.3",
