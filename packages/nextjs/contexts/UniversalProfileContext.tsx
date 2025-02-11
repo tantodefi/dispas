@@ -22,7 +22,7 @@ export const luksoNetworks = [
   },
 ];
 
-interface Profile {
+export interface Profile {
   name: string;
   description: string;
   tags: string[];
