@@ -7,7 +7,7 @@ import { formatEther, isAddress } from "viem";
 import { useAccount } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
 import { useWatchBalance } from "~~/hooks/scaffold-eth";
-import { useGlobalState } from "~~/services/store/store";
+import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
 type Props = {};
 
@@ -22,12 +22,18 @@ export default function Transfer({}: Props) {
 
   const account = useAccount();
   const { data: balance } = useWatchBalance({ address: account.address });
-  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
+  const { price: nativeCurrencyPrice } = useCryptoPrice();
 
   const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
   const activeCurrencyStyle = { color: "purple", fontWeight: "bold" };
   const errorStyle = { color: "red" };
+
+  const switchCurrency = () => {
+    if (!nativeCurrencyPrice) return;
+
+    setIsDollar(prev => !prev);
+  };
 
   // Handle input conversion & enforce numeric values
   const handleInput = (input: string) => {
@@ -40,6 +46,11 @@ export default function Transfer({}: Props) {
     // Ensure only valid floating numbers are parsed
     const numericValue = input.replace(/[^0-9.]/g, ""); // Remove non-numeric characters except `.`
     if (!/^\d*\.?\d*$/.test(numericValue) || numericValue == "") return; // Ensure valid decimal format
+
+    if (!nativeCurrencyPrice) {
+      setTotalNativeValue(numericValue);
+      return;
+    }
 
     if (isDollar) {
       setTotalDollarValue(numericValue);
@@ -83,16 +94,45 @@ export default function Transfer({}: Props) {
   };
 
   const addRecipientAmount = (recipient: `0x${string}`, amount: string) => {
-    // add the difference between the old and new amount
     const payment = payments.find(payment => payment.recipient.toLowerCase() === recipient.toLowerCase());
-    setTotalNativeValue(value => ((Number(value) || 0) + Number(amount) - Number(payment?.amount)).toString());
 
+    // add the difference between the old and new amount
+    const totalValue = ((Number(totalNativeValue) || 0) + Number(amount) - Number(payment?.amount)).toString();
+
+    setTotalNativeValue(totalValue);
+    if (nativeCurrencyPrice) {
+      setTotalDollarValue((parseFloat(totalValue) * nativeCurrencyPrice).toFixed(2));
+    }
     // update amount
     setPayments(prevPayments =>
       prevPayments.map(payment =>
         payment.recipient.toLowerCase() === recipient.toLowerCase() ? { ...payment, amount } : payment,
       ),
     );
+  };
+
+  const isSharedEqually = (): boolean =>
+    Number(totalNativeValue) === payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+  const shareEqually = () => {
+    if (payments.length === 0 || Number(totalNativeValue) === 0 || isSharedEqually()) return;
+
+    const shareAmount = Number(totalNativeValue) / payments.length; // Fixed to 6 decimals for precision
+
+    setPayments(prevPayments =>
+      prevPayments.map(payment => ({
+        ...payment,
+        amount: shareAmount.toString(),
+      })),
+    );
+
+    const newTotalNativeValue = shareAmount * payments.length;
+
+    setTotalNativeValue(newTotalNativeValue.toString());
+
+    if (nativeCurrencyPrice) {
+      setTotalDollarValue((Number(newTotalNativeValue) * nativeCurrencyPrice).toFixed(2));
+    }
   };
 
   return (
@@ -118,19 +158,32 @@ export default function Transfer({}: Props) {
           {displayConversion} {isDollar && "LYX"}
         </strong>
 
-        <button
-          className="border border-black px-2 py-1 text-sm mt-2 rounded-md"
-          onClick={() => setIsDollar(prev => !prev)}
-        >
+        <button className="border border-black px-2 py-1 text-sm mt-2 rounded-md" onClick={switchCurrency}>
           <span style={isDollar ? activeCurrencyStyle : {}}>USD</span> /{" "}
           <span style={!isDollar ? activeCurrencyStyle : {}}>LYX</span>
+        </button>
+
+        <button
+          onClick={shareEqually}
+          className="bg-gray-500 text-white hover:bg-white px-4 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-3xl font-light duration-200 mt-4 text-xs"
+          style={{
+            opacity: isSharedEqually() ? 0 : 1,
+          }}
+        >
+          Share
         </button>
       </div>
 
       <div className="flex-1 flex flex-col items-center pt-4">
-        <div id="payments" className="flex flex-wrap gap-2">
+        <div id="payments" className="flex overflow-x-auto gap-2">
           {payments.map(payment => (
-            <Payment key={payment.recipient} payment={payment} onClose={removePayment} onChange={addRecipientAmount} />
+            <Payment
+              key={payment.recipient}
+              payment={payment}
+              nativeCurrencyPrice={nativeCurrencyPrice}
+              onClose={removePayment}
+              onChange={addRecipientAmount}
+            />
           ))}
         </div>
 

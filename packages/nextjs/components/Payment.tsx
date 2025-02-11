@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Profile from "./Profile";
 import { CloseButton, Input } from "@chakra-ui/react";
-import { useGlobalState } from "~~/services/store/store";
 
 export interface PaymentType {
   recipient: `0x${string}`;
@@ -10,17 +9,16 @@ export interface PaymentType {
 
 type Props = {
   payment: PaymentType;
+  nativeCurrencyPrice: number | null;
   onClose: (recipient: `0x${string}`) => void;
   onChange: (recipient: `0x${string}`, amount: string) => void;
 };
 
-export default function Payment({ payment, onClose, onChange }: Props) {
+export default function Payment({ payment, nativeCurrencyPrice, onClose, onChange }: Props) {
   const [showInput, setShowInput] = useState(true);
   const [nativeValue, setNativeValue] = useState(payment.amount);
   const [dollarValue, setDollarValue] = useState("");
   const [isDollar, setIsDollar] = useState(false);
-
-  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
 
   const handleInput = (input: string) => {
     if (input.trim() == "") {
@@ -31,6 +29,11 @@ export default function Payment({ payment, onClose, onChange }: Props) {
     // Ensure only valid floating numbers are parsed
     const numericValue = input.replace(/[^0-9.]/g, ""); // Remove non-numeric characters except `.`
     if (!/^\d*\.?\d*$/.test(numericValue) || numericValue == "") return; // Ensure valid decimal format
+
+    if (!nativeCurrencyPrice) {
+      setNativeValue(numericValue);
+      return;
+    }
 
     if (isDollar) {
       setDollarValue(numericValue);
@@ -69,6 +72,16 @@ export default function Payment({ payment, onClose, onChange }: Props) {
     );
   }, [isDollar]);
 
+  useEffect(() => {
+    if (payment.amount !== "") {
+      setShowInput(false);
+      setNativeValue(payment.amount);
+
+      if (!nativeCurrencyPrice) return;
+      setDollarValue((parseFloat(payment.amount) * nativeCurrencyPrice).toFixed(2));
+    }
+  }, [payment.amount]);
+
   return (
     <div className="flex flex-col items-center gap-1 relative">
       <CloseButton className="absolute top-[-10px] right-0 text-red-500" onClick={() => onClose(payment.recipient)} />
@@ -80,20 +93,20 @@ export default function Payment({ payment, onClose, onChange }: Props) {
             {currencyToggle}
             <Input
               placeholder="0"
-              className="h-8 w-32 outline-none"
+              className="h-8 w-32 outline-none text-black"
               value={displayValue}
               onChange={e => handleInput(e.target.value)}
               required
             />
           </form>
 
-          <strong className="text-md font-semibold italic text-gray-500">
+          <strong className="text-md text-center font-semibold italic text-gray-500 max-w-[100px]">
             ~{!isDollar && "$"}
             {displayConversion} {isDollar && "LYX"}
           </strong>
         </div>
       ) : (
-        <span className="text-sm cursor-pointer max-w-[100px]" onClick={() => setShowInput(true)}>
+        <span className="text-sm text-center cursor-pointer max-w-[100px]" onClick={() => setShowInput(true)}>
           {payment.amount} LYX
         </span>
       )}
