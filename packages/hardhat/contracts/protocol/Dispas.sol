@@ -44,9 +44,6 @@ contract Dispas is IDispas {
             // attempt transfer
             (bool success, ) = payment.recipient.call{ value: payment.amount }("");
             require(success, Dispas__TransferFailed(payment.recipient, payment.amount));
-
-            // emit event for successful payment
-            emit PaymentSent(payment.recipient, payment.amount);
         }
 
         // emit event for overall distribution
