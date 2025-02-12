@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
 import { ProfileSearch } from "./ProfileSearch";
 import { Button, HStack, Input } from "@chakra-ui/react";
+import { FaDollarSign, FaShareAlt } from "react-icons/fa";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
 import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
@@ -25,7 +26,6 @@ export default function Transfer({}: Props) {
 
   const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
-  const activeCurrencyStyle = { color: "purple", fontWeight: "bold" };
   const errorStyle = { color: "red" };
 
   const switchCurrency = () => {
@@ -221,20 +221,24 @@ export default function Transfer({}: Props) {
         </strong>
 
         <HStack className="mt-4">
-          <button
-            className="border border-gray-500 px-2 py-1 text-xs rounded-lg text-black w-24 h-8"
+          <Button
             onClick={switchCurrency}
+            className="border border-gray-300 w-10 aspect-square flex justify-center items-center rounded-full p-2"
           >
-            <span style={isDollar ? activeCurrencyStyle : {}}>USD</span> /{" "}
-            <span style={!isDollar ? activeCurrencyStyle : {}}>LYX</span>
-          </button>
+            {isDollar ? (
+              // <span className="text-sm font-bold text-green-500">$</span>
+              <FaDollarSign className="text-green-400" />
+            ) : (
+              <img src="./images/lukso_logo.png" className="w-6 aspect-square" />
+            )}
+          </Button>
 
           <Button
             onClick={shareEqually}
-            className="bg-gray-500 text-white w-24 h-8 font-bold hover:bg-white py-1 hover:text-gray-500 border hover:border-gray-500 rounded-lg duration-200 text-xs"
+            className="cursor-pointer bg-gray-500 text-white hover:bg-white hover:text-gray-500 border hover:border-gray-500 w-10 aspect-square flex justify-center items-center rounded-full p-2 duration-200"
             disabled={isSharedEqually()}
           >
-            Share
+            <FaShareAlt />
           </Button>
         </HStack>
       </div>
