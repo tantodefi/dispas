@@ -151,11 +151,6 @@ export default function Transfer({}: Props) {
       return;
     }
 
-    if (!dispas) {
-      alert("Loading resources...");
-      return;
-    }
-
     // Ensure all payments have valid amounts
     const hasInvalidPayment = payments.some(payment => !payment.amount || Number(payment.amount) <= 0);
     if (hasInvalidPayment) {
@@ -180,6 +175,10 @@ export default function Transfer({}: Props) {
           value: _payments[0].amount,
         });
       } else {
+        if (!dispas) {
+          alert("Loading resources...");
+          return;
+        }
         await writeContractAsync({
           abi: dispas.abi,
           address: dispas.address,
@@ -202,8 +201,8 @@ export default function Transfer({}: Props) {
   };
 
   return (
-    <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] h-[75vh] w-full max-w-[450px] mx-4 rounded-3xl flex flex-col">
-      <div className="flex flex-1 flex-col justify-center items-center border-b rounded-t-3xl">
+    <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] w-full max-w-[450px] mx-4 rounded-3xl flex flex-col">
+      <div className="flex flex-1 flex-col justify-center items-center border-b rounded-t-3xl py-4">
         {account.isConnected && account.address ? (
           <Profile address={account.address as `0x${string}`} />
         ) : (
@@ -251,7 +250,10 @@ export default function Transfer({}: Props) {
       </div>
 
       <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner rounded-b-3xl">
-        <div id="payments" className="flex flex-1 max-w-full items-center overflow-x-auto space-x-2 px-2 no-scrollbar">
+        <div
+          id="payments"
+          className="flex flex-1 max-w-full items-center overflow-x-auto space-x-2 py-4 px-2 no-scrollbar"
+        >
           {payments.length === 0 ? (
             <ProfilePlaceholder />
           ) : (
