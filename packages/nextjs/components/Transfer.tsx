@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
+import SearchProfile from "./SearchProfile";
 import { HStack, Input } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
 import { formatEther, isAddress, parseEther } from "viem";
@@ -17,6 +18,7 @@ export default function Transfer({}: Props) {
   const [totalDollarValue, setTotalDollarValue] = useState("");
   const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
   const [isSending, setIsSending] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const [payments, setPayments] = useState<PaymentType[]>([]);
 
@@ -260,7 +262,7 @@ export default function Transfer({}: Props) {
           )}
         </div>
 
-        <form onSubmit={handleSearch} className="w-full flex justify-center">
+        <form onSubmit={handleSearch} className="w-full flex justify-center relative">
           <InputGroup
             endElement={<CiSearch className="text-2xl text-black" />}
             className="border border-gray-200 bg-white w-[85%] rounded-xl mt-4"
@@ -272,6 +274,10 @@ export default function Transfer({}: Props) {
               onChange={e => setRecipient(e.target.value)}
             />
           </InputGroup>
+
+          {searchResults.length > 0 && (
+            <div className="absolute top-[4.7rem] flex flex-col overflow-y-auto space-y-1 px-2 py-1 h-[3.5rem] w-[85%] bg-white rounded-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"></div>
+          )}
         </form>
 
         <button
