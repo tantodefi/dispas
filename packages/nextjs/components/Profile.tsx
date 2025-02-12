@@ -54,7 +54,7 @@ export default function Profile({ address, showName }: Props) {
             <img
               src={profile.profileImage[0].url.replace("ipfs://", "https://api.universalprofile.cloud/ipfs/")}
               alt="Profile"
-              className="w-full h-full rounded-full object-cover"
+              className="w-20 aspect-square rounded-full object-cover"
             />
           </Link>
         )}

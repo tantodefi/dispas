@@ -226,7 +226,7 @@ export default function Transfer({}: Props) {
       </div>
 
       <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner">
-        <div className="flex flex-1 items-center overflow-x-auto gap-2">
+        <div id="payments" className="flex flex-1 max-w-full items-center overflow-x-auto space-x-2 px-2 no-scrollbar">
           {payments.map(payment => (
             <Payment
               key={payment.recipient}
