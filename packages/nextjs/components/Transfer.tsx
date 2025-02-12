@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
-import { Input } from "@chakra-ui/react";
+import { HStack, Input } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
 import { formatEther, isAddress, parseEther } from "viem";
@@ -190,47 +190,52 @@ export default function Transfer({}: Props) {
   };
 
   return (
-    <div className="shadow-2xl h-[75vh] w-full max-w-[500px] mx-4 rounded-2xl flex flex-col">
-      <div className="flex flex-1 flex-col justify-center items-center border-b">
-        <Profile address="0xb5dcad2a23c5de55e241f20602224d1921318008" />
+    <div className="shadow-[inset_-12px_-8px_40px_#46464620] h-[75vh] w-full max-w-[450px] mx-4 rounded-3xl flex flex-col">
+      <div className="flex flex-1 flex-col justify-center items-center border-b rounded-t-3xl">
+        <Profile address={"0xb5dcad2a23c5de55e241f20602224d1921318008"} />
 
-        <div className="flex justify-center items-center w-full max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
-          {isDollar && totalNativeValue && <span className="text-4xl">$</span>}
+        <div className="flex justify-center items-center text-3xl w-full max-w-[90%] overflow-hidden text-ellipsis text-black whitespace-nowrap">
+          {isDollar && totalNativeValue && <span>$</span>}
           <Input
             placeholder="0"
-            className="h-16 text-center text-4xl outline-none"
+            className="h-16 text-center outline-none"
             value={displayTotalValue}
             onChange={e => handleInput(e.target.value)}
             required
             width={`${Math.max(displayTotalValue.length, 1)}ch`}
           />
-          {!isDollar && totalNativeValue && <span className="text-4xl ml-1">LYX</span>}
+          {!isDollar && totalNativeValue && <span className="ml-1">LYX</span>}
         </div>
 
-        <strong className="text-md font-semibold italic text-gray-500" style={isBalanceInsufficient ? errorStyle : {}}>
+        <strong
+          className="text-md font-semibold italic text-gray-500 mt-[-10px]"
+          style={isBalanceInsufficient ? errorStyle : {}}
+        >
           ~{!isDollar && "$"}
           {displayConversion} {isDollar && "LYX"}
         </strong>
 
-        <button className="border border-black px-2 py-1 text-sm mt-2 rounded-md" onClick={switchCurrency}>
-          <span style={isDollar ? activeCurrencyStyle : {}}>USD</span> /{" "}
-          <span style={!isDollar ? activeCurrencyStyle : {}}>LYX</span>
-        </button>
+        <HStack className="mt-4">
+          <button className="border border-black px-2 py-1 text-sm rounded-lg text-black w-24" onClick={switchCurrency}>
+            <span style={isDollar ? activeCurrencyStyle : {}}>USD</span> /{" "}
+            <span style={!isDollar ? activeCurrencyStyle : {}}>LYX</span>
+          </button>
 
-        <button
-          onClick={shareEqually}
-          className="bg-gray-500 text-white hover:bg-white px-4 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-3xl font-light duration-200 mt-4 text-xs"
-          disabled={isSharedEqually()}
-        >
-          Share
-        </button>
+          <button
+            onClick={shareEqually}
+            className="bg-gray-500 text-white w-24 font-bold hover:bg-white py-2 hover:text-gray-500 border hover:border-gray-500 rounded-lg duration-200 text-xs"
+            disabled={isSharedEqually()}
+          >
+            Share
+          </button>
+        </HStack>
       </div>
 
-      <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner">
+      <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner rounded-b-3xl">
         <div id="payments" className="flex flex-1 max-w-full items-center overflow-x-auto space-x-2 px-2 no-scrollbar">
           {payments.length === 0 ? (
             <div className="flex flex-col items-center">
-              <div className="w-16 aspect-square rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-white text-3xl">
+              <div className="w-[4.3rem] aspect-square rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-white text-3xl">
                 <IoPersonOutline />
               </div>
 

@@ -111,7 +111,7 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
         </div>
       ) : (
         <span
-          className="text-sm text-black hover:text-purple-400 duration-200 text-center cursor-pointer max-w-[100px]"
+          className="text-sm text-black hover:text-purple-400 hover:font-bold duration-200 text-center cursor-pointer max-w-[100px]"
           onClick={() => setShowInput(true)}
         >
           {payment.amount} LYX
