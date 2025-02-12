@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Profile from "./Profile";
-import { CloseButton, Input } from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 export interface PaymentType {
   recipient: `0x${string}`;
@@ -84,12 +85,15 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
 
   return (
     <div className="flex flex-col items-center gap-1 relative">
-      <CloseButton className="absolute top-[-10px] right-0 text-red-500" onClick={() => onClose(payment.recipient)} />
+      <IoIosCloseCircleOutline
+        className="absolute top-[-5px] right-5 text-lg cursor-pointer duration-200 text-gray-600 hover:text-red-400"
+        onClick={() => onClose(payment.recipient)}
+      />
       <Profile address={payment.recipient} showName />
 
       {showInput ? (
         <div className="flex flex-col items-center">
-          <form onSubmit={handleSubmit} className="flex items-center bg-gray-100">
+          <form onSubmit={handleSubmit} className="flex items-center border border-gray-200 bg-white rounded-lg">
             {currencyToggle}
             <Input
               placeholder="0"
@@ -106,7 +110,10 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
           </strong>
         </div>
       ) : (
-        <span className="text-sm text-center cursor-pointer max-w-[100px]" onClick={() => setShowInput(true)}>
+        <span
+          className="text-sm text-black hover:text-purple-400 duration-200 text-center cursor-pointer max-w-[100px]"
+          onClick={() => setShowInput(true)}
+        >
           {payment.amount} LYX
         </span>
       )}

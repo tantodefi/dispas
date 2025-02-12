@@ -42,28 +42,28 @@ export default function Profile({ address, showName }: Props) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-20 aspect-square rounded-full" style={{ backgroundColor: getAddressColor(address) }}>
-        {!profile?.profileImage || profile.profileImage.length === 0 ? (
-          <BlockieAvatar
-            address={address}
-            // @ts-ignore
-            size={"100%"}
-          />
-        ) : (
-          <Link href={`https://universaleverything.io/${address}`} target="_blank">
+      <div className="w-16 aspect-square rounded-full" style={{ backgroundColor: getAddressColor(address) }}>
+        <Link href={`https://universaleverything.io/${address}`} target="_blank">
+          {!profile?.profileImage || profile.profileImage.length === 0 ? (
+            <BlockieAvatar
+              address={address}
+              // @ts-ignore
+              size={"100%"}
+            />
+          ) : (
             <img
               src={profile.profileImage[0].url.replace("ipfs://", "https://api.universalprofile.cloud/ipfs/")}
               alt="Profile"
-              className="w-20 aspect-square rounded-full object-cover"
+              className="w-16 aspect-square rounded-full object-cover"
             />
-          </Link>
-        )}
+          )}
+        </Link>
       </div>
 
       {showName && (
-        <strong className="text-sm mt-1 text-purple-500">
+        <strong className="text-xs mt-1 text-center text-black font-bold w-32">
           {profile ? `@${profile.name}` : truncateAddress(address)}
-          {profile && <span className="text-blue-400">#{getFirst4Hex(address)}</span>}
+          {profile && <span className="text-purple-400 whitespace-nowrap">#{getFirst4Hex(address)}</span>}
         </strong>
       )}
     </div>
