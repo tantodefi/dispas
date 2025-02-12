@@ -46,7 +46,10 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
   };
 
   const switchCurrency = () => {
-    if (!nativeCurrencyPrice) return;
+    if (!nativeCurrencyPrice) {
+      alert("Loading resources...");
+      return;
+    }
 
     setIsDollar(prev => !prev);
   };

@@ -61,7 +61,7 @@ export default function Profile({ address, showName }: Props) {
       </div>
 
       {showName && (
-        <strong className="text-xs mt-1 text-center text-black font-bold w-32">
+        <strong className="text-xs mt-1 text-center text-black font-bold w-32 lowercase">
           {profile ? `@${profile.name}` : truncateAddress(address)}
           {profile && <span className="text-purple-400 whitespace-nowrap">#{getFirst4Hex(address)}</span>}
         </strong>

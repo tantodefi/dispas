@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
-import { HStack, Input } from "@chakra-ui/react";
+import { Button, HStack, Input } from "@chakra-ui/react";
 import { formatEther, isAddress, parseEther } from "viem";
 import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
@@ -31,7 +31,10 @@ export default function Transfer({}: Props) {
   const errorStyle = { color: "red" };
 
   const switchCurrency = () => {
-    if (!nativeCurrencyPrice) return;
+    if (!nativeCurrencyPrice) {
+      alert("Loading resources...");
+      return;
+    }
 
     setIsDollar(prev => !prev);
   };
@@ -113,6 +116,8 @@ export default function Transfer({}: Props) {
   };
 
   const isSharedEqually = (): boolean =>
+    totalNativeValue === "" ||
+    payments.length === 0 ||
     Number(totalNativeValue) === payments.reduce((sum, p) => sum + Number(p.amount || -1), 0);
 
   const shareEqually = () => {
@@ -197,7 +202,7 @@ export default function Transfer({}: Props) {
   };
 
   return (
-    <div className="shadow-[inset_-12px_-8px_40px_#46464620] h-[75vh] w-full max-w-[450px] mx-4 rounded-3xl flex flex-col">
+    <div className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] h-[75vh] w-full max-w-[450px] mx-4 rounded-3xl flex flex-col">
       <div className="flex flex-1 flex-col justify-center items-center border-b rounded-t-3xl">
         {account.isConnected && account.address ? (
           <Profile address={account.address as `0x${string}`} />
@@ -227,18 +232,21 @@ export default function Transfer({}: Props) {
         </strong>
 
         <HStack className="mt-4">
-          <button className="border border-black px-2 py-1 text-sm rounded-lg text-black w-24" onClick={switchCurrency}>
+          <button
+            className="border border-gray-500 px-2 py-1 text-xs rounded-lg text-black w-24 h-8"
+            onClick={switchCurrency}
+          >
             <span style={isDollar ? activeCurrencyStyle : {}}>USD</span> /{" "}
             <span style={!isDollar ? activeCurrencyStyle : {}}>LYX</span>
           </button>
 
-          <button
+          <Button
             onClick={shareEqually}
-            className="bg-gray-500 text-white w-24 font-bold hover:bg-white py-2 hover:text-gray-500 border hover:border-gray-500 rounded-lg duration-200 text-xs"
+            className="bg-gray-500 text-white w-24 h-8 font-bold hover:bg-white py-1 hover:text-gray-500 border hover:border-gray-500 rounded-lg duration-200 text-xs"
             disabled={isSharedEqually()}
           >
             Share
-          </button>
+          </Button>
         </HStack>
       </div>
 
