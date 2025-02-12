@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
+import { ProfileSearch } from "./ProfileSearch";
 import { Button, HStack, Input } from "@chakra-ui/react";
-import { formatEther, isAddress, parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
-import { InputGroup } from "~~/components//ui/input-group";
 import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
@@ -18,8 +18,6 @@ export default function Transfer({}: Props) {
   const [isSending, setIsSending] = useState(false);
 
   const [payments, setPayments] = useState<PaymentType[]>([]);
-
-  const [recipient, setRecipient] = useState("");
 
   const account = useAccount();
   const { data: balance } = useWatchBalance({ address: account.address });
@@ -69,26 +67,18 @@ export default function Transfer({}: Props) {
   const displayConversion = isDollar ? totalNativeValue : totalDollarValue;
   const isBalanceInsufficient = Number(totalNativeValue) > formattedBalance;
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!isAddress(recipient)) {
-      alert("Invalid address");
-      return;
-    }
-
+  const handleRecipientSelection = (recipient: `0x${string}`): boolean => {
     // Check if the recipient is already in the list
     if (payments.some(payment => payment.recipient.toLowerCase() === recipient.toLowerCase())) {
       alert("Recipient already added");
-      return;
+      return false;
     }
 
     // Add recipient with an initial amount of 0
     // @ts-ignore
     setPayments(prevPayments => [...prevPayments, { recipient, amount: "" }]);
 
-    // Clear input field after adding
-    setRecipient("");
+    return true;
   };
 
   const removePayment = (recipient: `0x${string}`) => {
@@ -269,16 +259,7 @@ export default function Transfer({}: Props) {
           )}
         </div>
 
-        <form onSubmit={handleSearch} className="w-full flex justify-center relative">
-          <InputGroup className="border border-gray-200 bg-white w-[85%] rounded-xl mt-4">
-            <Input
-              placeholder="Enter address of recipient"
-              className="pl-4 text-sm text-black rounded-xl h-12"
-              value={recipient}
-              onChange={e => setRecipient(e.target.value)}
-            />
-          </InputGroup>
-        </form>
+        <ProfileSearch onSelectAddress={handleRecipientSelection} />
 
         <button
           onClick={send}

@@ -29,6 +29,8 @@
     "burner-connector": "0.0.9",
     "daisyui": "4.12.10",
     "ethereum-blockies-base64": "^1.0.2",
+    "graphql": "^16.10.0",
+    "graphql-request": "^7.1.2",
     "motion": "^12.4.2",
     "next": "~14.2.11",
     "next-nprogress-bar": "~2.3.13",
