@@ -3,10 +3,10 @@ import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import { Input } from "@chakra-ui/react";
 import { IoIosSearch } from "react-icons/io";
-import { formatEther, isAddress } from "viem";
-import { useAccount } from "wagmi";
+import { formatEther, isAddress, parseEther } from "viem";
+import { useAccount, useWriteContract } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
-import { useWatchBalance } from "~~/hooks/scaffold-eth";
+import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
 type Props = {};
@@ -15,6 +15,7 @@ export default function Transfer({}: Props) {
   const [totalNativeValue, setTotalNativeValue] = useState("");
   const [totalDollarValue, setTotalDollarValue] = useState("");
   const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
+  const [isSending, setIsSending] = useState(false);
 
   const [payments, setPayments] = useState<PaymentType[]>([]);
 
@@ -135,6 +136,58 @@ export default function Transfer({}: Props) {
     }
   };
 
+  const { data: dispas } = useDeployedContractInfo("Dispas");
+  const { writeContractAsync } = useWriteContract();
+
+  const send = async () => {
+    if (totalNativeValue === "" || Number(totalNativeValue) === 0) {
+      alert("Please input a valid total amount!");
+      return;
+    }
+
+    if (!dispas) {
+      alert("Loading resources...");
+      return;
+    }
+
+    // Ensure all payments have valid amounts
+    const hasInvalidPayment = payments.some(payment => !payment.amount || Number(payment.amount) <= 0);
+    if (hasInvalidPayment) {
+      alert("All recipients must have a valid amount greater than zero!");
+      return;
+    }
+
+    // Ensure total of payments matches the inputted amount
+    if (!isSharedEqually()) {
+      alert("Total amount does not match sum of payments!");
+      return;
+    }
+
+    try {
+      setIsSending(true);
+
+      const _payments = payments.map(payment => ({ ...payment, amount: parseEther(payment.amount) }));
+
+      await writeContractAsync({
+        abi: dispas.abi,
+        address: dispas.address,
+        functionName: "distributeFunds",
+        args: [_payments],
+        value: parseEther(totalNativeValue),
+      });
+
+      alert("Transfer successful! 🚀");
+
+      setTotalNativeValue("");
+      setTotalDollarValue("");
+      setPayments([]);
+    } catch (error) {
+      console.error("Failed to send: ", error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <div className="shadow-2xl h-[75vh] w-full max-w-[500px] mx-4 rounded-2xl flex flex-col">
       <div className="flex flex-1 flex-col justify-center items-center border-b">
@@ -166,9 +219,7 @@ export default function Transfer({}: Props) {
         <button
           onClick={shareEqually}
           className="bg-gray-500 text-white hover:bg-white px-4 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-3xl font-light duration-200 mt-4 text-xs"
-          style={{
-            opacity: isSharedEqually() ? 0 : 1,
-          }}
+          disabled={isSharedEqually()}
         >
           Share
         </button>
@@ -201,7 +252,10 @@ export default function Transfer({}: Props) {
           </InputGroup>
         </form>
 
-        <button className="bg-gray-500 text-white hover:bg-white px-8 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-lg font-light duration-200 mt-4 text-sm w-[85%]">
+        <button
+          onClick={send}
+          className="bg-gray-500 text-white hover:bg-white px-8 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-lg font-light duration-200 mt-4 text-sm w-[85%]"
+        >
           <text>Send 🚀</text>
         </button>
       </div>
