@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import { Input } from "@chakra-ui/react";
-import { IoIosSearch } from "react-icons/io";
+import { CiSearch } from "react-icons/ci";
 import { formatEther, isAddress, parseEther } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
@@ -113,7 +113,7 @@ export default function Transfer({}: Props) {
   };
 
   const isSharedEqually = (): boolean =>
-    Number(totalNativeValue) === payments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    Number(totalNativeValue) === payments.reduce((sum, p) => sum + Number(p.amount || -1), 0);
 
   const shareEqually = () => {
     if (payments.length === 0 || Number(totalNativeValue) === 0 || isSharedEqually()) return;
@@ -225,8 +225,8 @@ export default function Transfer({}: Props) {
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center pt-4">
-        <div id="payments" className="flex overflow-x-auto gap-2">
+      <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner">
+        <div className="flex flex-1 items-center overflow-x-auto gap-2">
           {payments.map(payment => (
             <Payment
               key={payment.recipient}
@@ -240,12 +240,12 @@ export default function Transfer({}: Props) {
 
         <form onSubmit={handleSearch} className="w-full flex justify-center">
           <InputGroup
-            endElement={<IoIosSearch className="text-xl text-black" />}
-            className="bg-gray-100 w-[85%] mt-4 rounded-lg"
+            endElement={<CiSearch className="text-2xl text-black" />}
+            className="border border-gray-200 bg-white w-[85%] rounded-xl mt-4"
           >
             <Input
               placeholder="Enter address of recipient"
-              className="pl-4 outline-none"
+              className="pl-4 text-sm text-black rounded-xl h-12"
               value={recipient}
               onChange={e => setRecipient(e.target.value)}
             />
@@ -254,9 +254,9 @@ export default function Transfer({}: Props) {
 
         <button
           onClick={send}
-          className="bg-gray-500 text-white hover:bg-white px-8 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-lg font-light duration-200 mt-4 text-sm w-[85%]"
+          className="bg-gray-500 text-white hover:bg-white px-8 py-2 hover:text-gray-500 border hover:border-gray-500 rounded-xl font-light duration-200 mt-4 text-sm h-12 w-[85%]"
         >
-          <text>Send 🚀</text>
+          <text className="font-extrabold">{payments.length > 1 ? "Distribute" : "Send"}</text>
         </button>
       </div>
     </div>
