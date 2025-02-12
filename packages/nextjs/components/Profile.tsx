@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { BlockieAvatar } from "./scaffold-eth";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 import lsp3ProfileSchema from "@erc725/erc725.js/schemas/LSP3ProfileMetadata.json";
 import { Profile as ProfileType, luksoNetworks } from "~~/contexts/UniversalProfileContext";
-import { getFirst4Hex } from "~~/utils/helpers";
+import { getFirst4Hex, truncateAddress } from "~~/utils/helpers";
 import { getAddressColor } from "~~/utils/scaffold-eth/getAddressColor";
 
 type Props = {
@@ -42,7 +43,13 @@ export default function Profile({ address, showName }: Props) {
   return (
     <div className="flex flex-col items-center">
       <div className="w-20 aspect-square rounded-full" style={{ backgroundColor: getAddressColor(address) }}>
-        {!profile?.profileImage || profile.profileImage.length === 0 ? null : (
+        {!profile?.profileImage || profile.profileImage.length === 0 ? (
+          <BlockieAvatar
+            address={address}
+            // @ts-ignore
+            size={"100%"}
+          />
+        ) : (
           <Link href={`https://universaleverything.io/${address}`} target="_blank">
             <img
               src={profile.profileImage[0].url.replace("ipfs://", "https://api.universalprofile.cloud/ipfs/")}
@@ -53,10 +60,10 @@ export default function Profile({ address, showName }: Props) {
         )}
       </div>
 
-      {showName && profile && (
+      {showName && (
         <strong className="text-sm mt-1 text-purple-500">
-          @{profile?.name}
-          <span className="text-blue-400">#{getFirst4Hex(address)}</span>
+          {profile ? `@${profile.name}` : truncateAddress(address)}
+          {profile && <span className="text-blue-400">#{getFirst4Hex(address)}</span>}
         </strong>
       )}
     </div>

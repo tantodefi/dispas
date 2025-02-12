@@ -93,14 +93,14 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
             {currencyToggle}
             <Input
               placeholder="0"
-              className="h-8 w-32 outline-none text-black"
+              className="h-8 w-24 outline-none text-black"
               value={displayValue}
               onChange={e => handleInput(e.target.value)}
               required
             />
           </form>
 
-          <strong className="text-md text-center font-semibold italic text-gray-500 max-w-[100px]">
+          <strong className="text-xs text-center font-semibold italic text-gray-500 max-w-[100px]">
             ~{!isDollar && "$"}
             {displayConversion} {isDollar && "LYX"}
           </strong>

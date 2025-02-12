@@ -15,3 +15,20 @@ export function getFirst4Hex(address: string): string {
   // Remove '0x' prefix and return the first 4 characters
   return address.slice(2, 6);
 }
+
+/**
+ * Truncates an Ethereum address for better readability.
+ *
+ * Example:
+ * ```
+ * truncateAddress("0x1234567890abcdef1234567890abcdef12345678");
+ * // Output: "0x1234...5678"
+ * ```
+ *
+ * @param {string} address - The full Ethereum address.
+ * @returns {string} The truncated address in the format "0x1234...5678".
+ */
+export const truncateAddress = (address: string): string => {
+  if (!address || address.length < 10) return address; // Return as is if too short
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
