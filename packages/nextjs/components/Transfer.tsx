@@ -209,7 +209,7 @@ export default function Transfer({}: Props) {
             required
             width={`${Math.max(displayTotalValue.length, 1)}ch`}
           />
-          {!isDollar && totalNativeValue && <span className="ml-1">LYX</span>}
+          {!isDollar && totalNativeValue && <span className="ml-1 text-2xl">LYX</span>}
         </div>
 
         <strong
