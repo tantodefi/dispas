@@ -3,6 +3,7 @@ import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import { Input } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
+import { IoPersonOutline } from "react-icons/io5";
 import { formatEther, isAddress, parseEther } from "viem";
 import { useAccount, useWriteContract } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
@@ -227,15 +228,25 @@ export default function Transfer({}: Props) {
 
       <div className="flex-1 flex flex-col items-center py-4 bg-gray-100 shadow-inner">
         <div id="payments" className="flex flex-1 max-w-full items-center overflow-x-auto space-x-2 px-2 no-scrollbar">
-          {payments.map(payment => (
-            <Payment
-              key={payment.recipient}
-              payment={payment}
-              nativeCurrencyPrice={nativeCurrencyPrice}
-              onClose={removePayment}
-              onChange={addRecipientAmount}
-            />
-          ))}
+          {payments.length === 0 ? (
+            <div className="flex flex-col items-center">
+              <div className="w-16 aspect-square rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-white text-3xl">
+                <IoPersonOutline />
+              </div>
+
+              <text className="text-gray-300 font-bold">--</text>
+            </div>
+          ) : (
+            payments.map(payment => (
+              <Payment
+                key={payment.recipient}
+                payment={payment}
+                nativeCurrencyPrice={nativeCurrencyPrice}
+                onClose={removePayment}
+                onChange={addRecipientAmount}
+              />
+            ))
+          )}
         </div>
 
         <form onSubmit={handleSearch} className="w-full flex justify-center">
