@@ -5,7 +5,7 @@ import ProfilePlaceholder from "./ProfilePlaceholder";
 import { HStack, Input } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
 import { formatEther, isAddress, parseEther } from "viem";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
 import { InputGroup } from "~~/components//ui/input-group";
 import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
@@ -139,6 +139,7 @@ export default function Transfer({}: Props) {
 
   const { data: dispas } = useDeployedContractInfo("Dispas");
   const { writeContractAsync } = useWriteContract();
+  const { sendTransactionAsync } = useSendTransaction();
 
   const send = async () => {
     if (totalNativeValue === "" || Number(totalNativeValue) === 0) {
@@ -169,13 +170,20 @@ export default function Transfer({}: Props) {
 
       const _payments = payments.map(payment => ({ ...payment, amount: parseEther(payment.amount) }));
 
-      await writeContractAsync({
-        abi: dispas.abi,
-        address: dispas.address,
-        functionName: "distributeFunds",
-        args: [_payments],
-        value: parseEther(totalNativeValue),
-      });
+      if (_payments.length === 1) {
+        await sendTransactionAsync({
+          to: _payments[0].recipient,
+          value: _payments[0].amount,
+        });
+      } else {
+        await writeContractAsync({
+          abi: dispas.abi,
+          address: dispas.address,
+          functionName: "distributeFunds",
+          args: [_payments],
+          value: parseEther(totalNativeValue),
+        });
+      }
 
       alert("Transfer successful! 🚀");
 
