@@ -264,6 +264,40 @@ import { isAddress } from "viem";
  * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
  */
 
+/**
+ * ProfileSearch Component
+ *
+ * A searchable interface for LUKSO Universal Profiles that allows users to search and select
+ * blockchain addresses associated with profiles.
+ *
+ * Features:
+ * - Auto-search triggers when exactly 3 characters are entered
+ * - Manual search available via Enter key
+ * - Displays profile images with blockies fallback
+ * - Shows profile name, full name, and address in results
+ *
+ * @component
+ * @param {Object} props
+ * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
+ */
+
+/**
+ * ProfileSearch Component
+ *
+ * A searchable interface for LUKSO Universal Profiles that allows users to search and select
+ * blockchain addresses associated with profiles.
+ *
+ * Features:
+ * - Auto-search triggers when exactly 3 characters are entered
+ * - Manual search available via Enter key
+ * - Displays profile images with blockies fallback
+ * - Shows profile name, full name, and address in results
+ *
+ * @component
+ * @param {Object} props
+ * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
+ */
+
 const ENVIO_MAINNET_URL = "https://envio.lukso-mainnet.universal.tech/v1/graphql";
 
 const gqlQuery = gql`
@@ -306,12 +340,6 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleSearch = async () => {
-    if (debouncedQuery === "") {
-      if (showDropdown) {
-        setShowDropdown(false);
-      }
-      return;
-    }
     setLoading(true);
     try {
       const envioUrl = ENVIO_MAINNET_URL;
@@ -368,6 +396,12 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
   };
 
   useEffect(() => {
+    if (debouncedQuery === "" || query === "") {
+      if (showDropdown) {
+        setShowDropdown(false);
+      }
+      return;
+    }
     handleSearch();
   }, [debouncedQuery]);
 
