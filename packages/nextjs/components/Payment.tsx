@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Profile from "./Profile";
 import { toaster } from "./ui/toaster";
 import { Button, Input } from "@chakra-ui/react";
@@ -83,10 +84,9 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
             $
           </span>
         ) : (
-          <img
-            src="./images/lukso_logo.png"
-            className="w-4 aspect-square transition-transform duration-200 ease-in-out hover:scale-110"
-          />
+          <div className="relative w-4 aspect-square transition-transform duration-200 ease-in-out hover:scale-110">
+            <Image src="/images/lukso_logo.png" alt="LYX" fill />
+          </div>
         )}
       </Button>
     );

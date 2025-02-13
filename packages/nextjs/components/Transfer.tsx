@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import Payment, { PaymentType } from "./Payment";
 import Profile from "./Profile";
 import ProfilePlaceholder from "./ProfilePlaceholder";
@@ -256,10 +257,9 @@ export default function Transfer({}: Props) {
             {isDollar ? (
               <FaDollarSign className="text-green-400 group-hover:scale-110 transition-transform duration-200 ease-in-out" />
             ) : (
-              <img
-                src="./images/lukso_logo.png"
-                className="w-6 aspect-square group-hover:scale-110 transition-transform duration-200 ease-in-out"
-              />
+              <div className="relative w-6 aspect-square group-hover:scale-110 transition-transform duration-200 ease-in-out">
+                <Image src="/images/lukso_logo.png" alt="LYX" fill />
+              </div>
             )}
           </Button>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { BlockieAvatar } from "./scaffold-eth";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
@@ -51,11 +52,13 @@ export default function Profile({ address, showName }: Props) {
               size={"100%"}
             />
           ) : (
-            <img
-              src={profile.profileImage[0].url.replace("ipfs://", "https://api.universalprofile.cloud/ipfs/")}
-              alt="Profile"
-              className="w-16 aspect-square rounded-full object-cover"
-            />
+            <div className="relative w-16 aspect-square rounded-full object-cover">
+              <Image
+                src={profile.profileImage[0].url.replace("ipfs://", "https://api.universalprofile.cloud/ipfs/")}
+                alt="Profile"
+                fill
+              />
+            </div>
           )}
         </Link>
       </div>
