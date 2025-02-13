@@ -222,7 +222,7 @@ export default function Transfer({}: Props) {
         )}
 
         <div className="flex justify-center items-center text-3xl w-full max-w-[90%] overflow-hidden text-ellipsis text-black whitespace-nowrap">
-          {isDollar && totalNativeValue && <span className="text-2xl">$</span>}
+          {isDollar && totalNativeValue && <span className="text-2xl mr-[-5px]">$</span>}
           <Input
             placeholder="0"
             className="h-16 text-center outline-none"
@@ -231,12 +231,18 @@ export default function Transfer({}: Props) {
             required
             width={`${Math.max(displayTotalValue.length, 1)}ch`}
           />
-          {!isDollar && totalNativeValue && <span className="ml-1 text-2xl">LYX</span>}
+          {!isDollar && totalNativeValue && <span className="text-2xl">LYX</span>}
         </div>
 
         <strong
           className="text-md font-semibold italic text-gray-500 mt-[-10px]"
-          style={isBalanceInsufficient ? errorStyle : {}}
+          style={
+            isBalanceInsufficient
+              ? errorStyle
+              : {
+                  opacity: totalNativeValue && totalDollarValue ? 1 : 0,
+                }
+          }
         >
           ~{!isDollar && "$"}
           {displayConversion} {isDollar && "LYX"}

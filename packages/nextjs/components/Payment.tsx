@@ -111,7 +111,12 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
             />
           </form>
 
-          <strong className="text-xs text-center font-semibold italic text-gray-500 max-w-[100px]">
+          <strong
+            className="text-xs text-center font-semibold italic text-gray-500 max-w-[100px]"
+            style={{
+              opacity: nativeValue && dollarValue ? 1 : 0,
+            }}
+          >
             ~{!isDollar && "$"}
             {displayConversion} {isDollar && "LYX"}
           </strong>
