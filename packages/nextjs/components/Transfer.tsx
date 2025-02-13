@@ -7,6 +7,7 @@ import { Button, HStack, Input } from "@chakra-ui/react";
 import { FaDollarSign, FaShareAlt } from "react-icons/fa";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
+import { Toaster, toaster } from "~~/components/ui/toaster";
 import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
@@ -30,7 +31,10 @@ export default function Transfer({}: Props) {
 
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
-      alert("Loading resources...");
+      toaster.create({
+        title: "Loading resources...",
+        type: "error",
+      });
       return;
     }
 
@@ -70,7 +74,10 @@ export default function Transfer({}: Props) {
   const handleRecipientSelection = (recipient: `0x${string}`): boolean => {
     // Check if the recipient is already in the list
     if (payments.some(payment => payment.recipient.toLowerCase() === recipient.toLowerCase())) {
-      alert("Recipient already added");
+      toaster.create({
+        title: "Recipient already added",
+        type: "error",
+      });
       return false;
     }
 
@@ -137,20 +144,29 @@ export default function Transfer({}: Props) {
 
   const send = async () => {
     if (totalNativeValue === "" || Number(totalNativeValue) === 0) {
-      alert("Please input a valid total amount!");
+      toaster.create({
+        title: "Please input a valid total amount!",
+        type: "error",
+      });
       return;
     }
 
     // Ensure all payments have valid amounts
     const hasInvalidPayment = payments.some(payment => !payment.amount || Number(payment.amount) <= 0);
     if (hasInvalidPayment) {
-      alert("All recipients must have a valid amount greater than zero!");
+      toaster.create({
+        title: "All recipients must have a valid amount greater than zero!",
+        type: "error",
+      });
       return;
     }
 
     // Ensure total of payments matches the inputted amount
     if (!isSharedEqually()) {
-      alert("Total amount does not match sum of payments!");
+      toaster.create({
+        title: "Total amount does not match sum of payments!",
+        type: "error",
+      });
       return;
     }
 
@@ -166,7 +182,10 @@ export default function Transfer({}: Props) {
         });
       } else {
         if (!dispas) {
-          alert("Loading resources...");
+          toaster.create({
+            title: "Loading resources...",
+            type: "error",
+          });
           return;
         }
         await writeContractAsync({
@@ -178,7 +197,10 @@ export default function Transfer({}: Props) {
         });
       }
 
-      alert("Transfer successful! 🚀");
+      toaster.create({
+        title: "Transfer successful! 🚀",
+        type: "success",
+      });
 
       setTotalNativeValue("");
       setTotalDollarValue("");
@@ -277,6 +299,8 @@ export default function Transfer({}: Props) {
           )}
         </button>
       </div>
+
+      <Toaster />
     </div>
   );
 }

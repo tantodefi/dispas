@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Profile from "./Profile";
+import { toaster } from "./ui/toaster";
 import { Input } from "@chakra-ui/react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
@@ -47,7 +48,10 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
 
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
-      alert("Loading resources...");
+      toaster.create({
+        title: "Loading resources",
+        type: "error",
+      });
       return;
     }
 

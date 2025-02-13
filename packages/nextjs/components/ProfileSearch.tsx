@@ -19,11 +19,29 @@
 import { useEffect, useState } from "react";
 import SearchProfile from "./SearchProfile";
 import { InputGroup } from "./ui/input-group";
+import { toaster } from "./ui/toaster";
 import { Input } from "@chakra-ui/react";
 import { gql, request } from "graphql-request";
 import { CiSearch } from "react-icons/ci";
 import { useDebounceValue } from "usehooks-ts";
 import { isAddress } from "viem";
+
+/**
+ * ProfileSearch Component
+ *
+ * A searchable interface for LUKSO Universal Profiles that allows users to search and select
+ * blockchain addresses associated with profiles.
+ *
+ * Features:
+ * - Auto-search triggers when exactly 3 characters are entered
+ * - Manual search available via Enter key
+ * - Displays profile images with blockies fallback
+ * - Shows profile name, full name, and address in results
+ *
+ * @component
+ * @param {Object} props
+ * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
+ */
 
 /**
  * ProfileSearch Component
@@ -261,7 +279,10 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
 
   const handleSelectProfile = (address: `0x${string}`) => {
     if (!isAddress(address)) {
-      alert("Invalid address");
+      toaster.create({
+        title: "Invalid address",
+        type: "error",
+      });
       return;
     }
 
