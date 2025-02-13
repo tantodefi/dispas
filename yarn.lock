@@ -2518,7 +2518,7 @@ __metadata:
     prettier: ~3.3.3
     qrcode.react: ~4.0.1
     react: ~18.3.1
-    react-copy-to-clipboard: ~5.1.0
+    react-copy-to-clipboard: ^5.1.0
     react-dom: ~18.3.1
     react-hot-toast: ~2.4.0
     react-icons: ^5.4.0
@@ -12734,7 +12734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-copy-to-clipboard@npm:~5.1.0":
+"react-copy-to-clipboard@npm:^5.1.0":
   version: 5.1.0
   resolution: "react-copy-to-clipboard@npm:5.1.0"
   dependencies:

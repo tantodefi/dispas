@@ -100,7 +100,7 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
       if (!nativeCurrencyPrice) return;
       setDollarValue((parseFloat(payment.amount) * nativeCurrencyPrice).toFixed(2));
     }
-  }, [payment.amount]);
+  }, [payment.amount, nativeCurrencyPrice]);
 
   return (
     <div className="flex flex-col items-center gap-1 relative">

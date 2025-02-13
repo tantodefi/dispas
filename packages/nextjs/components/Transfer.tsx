@@ -12,9 +12,7 @@ import { Toaster, toaster } from "~~/components/ui/toaster";
 import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
-type Props = {};
-
-export default function Transfer({}: Props) {
+export default function Transfer() {
   const [totalNativeValue, setTotalNativeValue] = useState("");
   const [totalDollarValue, setTotalDollarValue] = useState("");
   const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
