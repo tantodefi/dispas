@@ -251,13 +251,15 @@ export default function Transfer({}: Props) {
         <HStack className="mt-4">
           <Button
             onClick={switchCurrency}
-            className="border border-gray-300 w-10 aspect-square flex justify-center items-center rounded-full p-2"
+            className="border border-gray-300 w-10 aspect-square flex justify-center items-center rounded-full p-2 transition-transform duration-200 ease-in-out group hover:scale-110"
           >
             {isDollar ? (
-              // <span className="text-sm font-bold text-green-500">$</span>
-              <FaDollarSign className="text-green-400" />
+              <FaDollarSign className="text-green-400 group-hover:scale-110 transition-transform duration-200 ease-in-out" />
             ) : (
-              <img src="./images/lukso_logo.png" className="w-6 aspect-square" />
+              <img
+                src="./images/lukso_logo.png"
+                className="w-6 aspect-square group-hover:scale-110 transition-transform duration-200 ease-in-out"
+              />
             )}
           </Button>
 

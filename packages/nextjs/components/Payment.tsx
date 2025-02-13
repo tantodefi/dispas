@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Profile from "./Profile";
 import { toaster } from "./ui/toaster";
-import { Input } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 export interface PaymentType {
@@ -46,6 +46,20 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (!nativeValue || Number(nativeValue) === 0) {
+        toaster.create({
+          title: "Please input an amount",
+          type: "warning",
+        });
+        return;
+      }
+      onChange(payment.recipient, nativeValue);
+      setShowInput(false);
+    }
+  };
+
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
       toaster.create({
@@ -58,25 +72,23 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
     setIsDollar(prev => !prev);
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
-    onChange(payment.recipient, nativeValue);
-    setShowInput(false);
-  };
-
   const displayValue = isDollar ? dollarValue : nativeValue;
   const displayConversion = isDollar ? nativeValue : dollarValue;
 
   const currencyToggle = useMemo(() => {
     return (
-      <div onClick={switchCurrency} className="cursor-pointer mx-2">
+      <Button onClick={switchCurrency} className="transition-transform duration-200 ease-in-out hover:scale-110">
         {isDollar ? (
-          <span className="text-sm text-green-500">$</span>
+          <span className="text-sm text-green-500 transition-transform duration-200 ease-in-out hover:scale-110">
+            $
+          </span>
         ) : (
-          <img src="./images/lukso_logo.png" className="w-4 aspect-square" />
+          <img
+            src="./images/lukso_logo.png"
+            className="w-4 aspect-square transition-transform duration-200 ease-in-out hover:scale-110"
+          />
         )}
-      </div>
+      </Button>
     );
   }, [isDollar]);
 
@@ -100,16 +112,17 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
 
       {showInput ? (
         <div className="flex flex-col items-center">
-          <form onSubmit={handleSubmit} className="flex items-center border border-gray-200 bg-white rounded-lg">
+          <div className="flex items-center border border-gray-200 bg-white rounded-lg">
             {currencyToggle}
             <Input
               placeholder="0"
               className="h-8 w-24 outline-none text-black"
               value={displayValue}
               onChange={e => handleInput(e.target.value)}
+              onKeyPress={handleKeyPress}
               required
             />
-          </form>
+          </div>
 
           <strong
             className="text-xs text-center font-semibold italic text-gray-500 max-w-[100px]"
