@@ -9,7 +9,7 @@ import { FaDollarSign, FaShareAlt } from "react-icons/fa";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
 import { Toaster, toaster } from "~~/components/ui/toaster";
-import { useDeployedContractInfo, useWatchBalance } from "~~/hooks/scaffold-eth";
+import { useDeployedContractInfo, useTransactor, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useCryptoPrice } from "~~/hooks/scaffold-eth/useCryptoPrice";
 
 export default function Transfer() {
@@ -140,6 +140,7 @@ export default function Transfer() {
   const { data: dispas } = useDeployedContractInfo("Dispas");
   const { writeContractAsync } = useWriteContract();
   const { sendTransactionAsync } = useSendTransaction();
+  const writeTx = useTransactor();
 
   const send = async () => {
     if (totalNativeValue === "" || Number(totalNativeValue) === 0) {
@@ -174,11 +175,13 @@ export default function Transfer() {
 
       const _payments = payments.map(payment => ({ ...payment, amount: parseEther(payment.amount) }));
 
+      let tx;
       if (_payments.length === 1) {
-        await sendTransactionAsync({
-          to: _payments[0].recipient,
-          value: _payments[0].amount,
-        });
+        tx = () =>
+          sendTransactionAsync({
+            to: _payments[0].recipient,
+            value: _payments[0].amount,
+          });
       } else {
         if (!dispas) {
           toaster.create({
@@ -187,14 +190,19 @@ export default function Transfer() {
           });
           return;
         }
-        await writeContractAsync({
-          abi: dispas.abi,
-          address: dispas.address,
-          functionName: "distributeFunds",
-          args: [_payments],
-          value: parseEther(totalNativeValue),
-        });
+        tx = () =>
+          writeContractAsync({
+            abi: dispas.abi,
+            address: dispas.address,
+            functionName: "distributeFunds",
+            args: [_payments],
+            value: parseEther(totalNativeValue),
+          });
       }
+
+      const txHash = await writeTx(tx);
+
+      console.log("Transaction Hash: ", txHash);
 
       toaster.create({
         title: "Transfer successful! 🚀",
@@ -206,6 +214,10 @@ export default function Transfer() {
       setPayments([]);
     } catch (error) {
       console.error("Failed to send: ", error);
+      toaster.create({
+        title: "Transfer failed. Check logs to see more details!",
+        type: "error",
+      });
     } finally {
       setIsSending(false);
     }
@@ -256,7 +268,7 @@ export default function Transfer() {
               <FaDollarSign className="text-green-400 group-hover:scale-110 transition-transform duration-200 ease-in-out" />
             ) : (
               <div className="relative w-6 aspect-square group-hover:scale-110 transition-transform duration-200 ease-in-out">
-                <Image src="/images/lukso_logo.png" alt="LYX" fill />
+                <Image src="/images/lukso_logo.png" alt="LYX" fill className="rounded-full" />
               </div>
             )}
           </Button>
