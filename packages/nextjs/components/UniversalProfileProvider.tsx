@@ -1,6 +1,8 @@
-import PropsWithChildren from "react";
 import { UniversalProfileProvider as UPProvider } from "~~/contexts/UniversalProfileContext";
 
-export const UniversalProfileProvider = ({ children }: PropsWithChildren) => {
+type Props = {
+  children: JSX.Element;
+};
+export const UniversalProfileProvider = ({ children }: Props) => {
   return <UPProvider>{children}</UPProvider>;
 };
