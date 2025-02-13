@@ -434,6 +434,23 @@ import { isAddress } from "viem";
  * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
  */
 
+/**
+ * ProfileSearch Component
+ *
+ * A searchable interface for LUKSO Universal Profiles that allows users to search and select
+ * blockchain addresses associated with profiles.
+ *
+ * Features:
+ * - Auto-search triggers when exactly 3 characters are entered
+ * - Manual search available via Enter key
+ * - Displays profile images with blockies fallback
+ * - Shows profile name, full name, and address in results
+ *
+ * @component
+ * @param {Object} props
+ * @param {(address: `0x${string}`) => void} props.onSelectAddress - Callback function triggered when a profile is selected
+ */
+
 const ENVIO_MAINNET_URL = "https://envio.lukso-mainnet.universal.tech/v1/graphql";
 
 const gqlQuery = gql`
@@ -472,23 +489,27 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useDebounceValue("", 500);
   const [results, setResults] = useState<Profile[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleSearch = async () => {
-    setLoading(true);
+    if (debouncedQuery === "" || query === "") {
+      setResults([]);
+      return;
+    }
+
+    setIsSearching(true);
     try {
       const envioUrl = ENVIO_MAINNET_URL;
       const { search_profiles: data } = (await request(envioUrl, gqlQuery, { id: debouncedQuery })) as {
         search_profiles: Profile[];
       };
       setResults(data);
-      setShowDropdown(true);
     } catch (error) {
       console.error("Search error:", error);
       setResults([]);
     } finally {
-      setLoading(false);
+      setIsSearching(false);
     }
   };
 
@@ -524,22 +545,21 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
     if (!value) {
       setShowDropdown(false);
     } else {
-      setLoading(true);
-      setShowDropdown(true);
+      if (!isSearching) {
+        setIsSearching(true);
+      }
+
+      if (!showDropdown) {
+        setShowDropdown(true);
+      }
     }
     setQuery(value);
     setDebouncedQuery(value);
   };
 
   useEffect(() => {
-    if (debouncedQuery === "" || query === "") {
-      if (showDropdown) {
-        setShowDropdown(false);
-      }
-      return;
-    }
     handleSearch();
-  }, [debouncedQuery, query, showDropdown]);
+  }, [debouncedQuery, query]);
 
   return (
     <div className="w-full flex justify-center relative">
@@ -559,7 +579,7 @@ export function ProfileSearch({ onSelectAddress }: SearchProps) {
 
       {showDropdown && (
         <div className="absolute top-[4.7rem] flex flex-col overflow-y-auto space-y-1 px-2 py-1 h-[3.5rem] w-[85%] bg-white rounded-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
-          {loading ? (
+          {isSearching ? (
             <div className="flex justify-center items-center py-4">
               <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin"></div>
             </div>
