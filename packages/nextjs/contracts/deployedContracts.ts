@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
+  42: {
     Dispas: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xC78871644B7007A3b19CD6147b4d444AE7C18987",
       abi: [
         {
           inputs: [],
