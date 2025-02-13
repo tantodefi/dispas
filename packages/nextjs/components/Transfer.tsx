@@ -222,7 +222,7 @@ export default function Transfer({}: Props) {
         )}
 
         <div className="flex justify-center items-center text-3xl w-full max-w-[90%] overflow-hidden text-ellipsis text-black whitespace-nowrap">
-          {isDollar && totalNativeValue && <span>$</span>}
+          {isDollar && totalNativeValue && <span className="text-2xl">$</span>}
           <Input
             placeholder="0"
             className="h-16 text-center outline-none"
