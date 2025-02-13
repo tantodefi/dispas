@@ -22,7 +22,11 @@ export default function Transfer() {
 
   const account = useAccount();
   const { data: balance } = useWatchBalance({ address: account.address });
-  const { price: nativeCurrencyPrice } = useCryptoPrice();
+  const {
+    price: nativeCurrencyPrice,
+    loading: isFetchingNativeCurrency,
+    fetchPrice: fetchNativeCurrency,
+  } = useCryptoPrice();
 
   const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
@@ -31,9 +35,14 @@ export default function Transfer() {
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
       toaster.create({
-        title: "Loading resources...",
-        type: "error",
+        title: "Loading exchange rate",
+        type: "warning",
       });
+
+      if (!isFetchingNativeCurrency) {
+        fetchNativeCurrency();
+      }
+
       return;
     }
 
@@ -296,8 +305,10 @@ export default function Transfer() {
                 key={payment.recipient}
                 payment={payment}
                 nativeCurrencyPrice={nativeCurrencyPrice}
+                isFetchingNativeCurrency={isFetchingNativeCurrency}
                 onClose={removePayment}
                 onChange={addRecipientAmount}
+                fetchNativeCurrency={fetchNativeCurrency}
               />
             ))
           )}

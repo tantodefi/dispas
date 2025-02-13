@@ -13,11 +13,20 @@ export interface PaymentType {
 type Props = {
   payment: PaymentType;
   nativeCurrencyPrice: number | null;
+  isFetchingNativeCurrency: boolean;
   onClose: (recipient: `0x${string}`) => void;
   onChange: (recipient: `0x${string}`, amount: string) => void;
+  fetchNativeCurrency: () => void;
 };
 
-export default function Payment({ payment, nativeCurrencyPrice, onClose, onChange }: Props) {
+export default function Payment({
+  payment,
+  nativeCurrencyPrice,
+  isFetchingNativeCurrency,
+  onClose,
+  onChange,
+  fetchNativeCurrency,
+}: Props) {
   const [showInput, setShowInput] = useState(true);
   const [nativeValue, setNativeValue] = useState(payment.amount);
   const [dollarValue, setDollarValue] = useState("");
@@ -64,9 +73,14 @@ export default function Payment({ payment, nativeCurrencyPrice, onClose, onChang
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
       toaster.create({
-        title: "Loading resources",
-        type: "error",
+        title: "Loading exchange rate",
+        type: "warning",
       });
+
+      if (!isFetchingNativeCurrency) {
+        fetchNativeCurrency();
+      }
+
       return;
     }
 
