@@ -6,8 +6,163 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   42: {
+    ERC5564Announcer: {
+      address: "0x8653F395983827E05A6625eED4D045e696980D16",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "caller",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "Announcement",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "announce",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        announce: "contracts/interfaces/IERC5564Announcer.sol",
+      },
+    },
+    ERC5564Registry: {
+      address: "0x4E581D6a88bc7D60D092673904d961B6b0961A40",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "StealthMetaAddressSet",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+          ],
+          name: "getStealthMetaAddress",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "setStealthMetaAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "signature",
+              type: "bytes",
+            },
+          ],
+          name: "setStealthMetaAddressFor",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+  4201: {
     Dispas: {
-      address: "0xC78871644B7007A3b19CD6147b4d444AE7C18987",
+      address: "0x746C338d272581967ad9F3F4d7CB3994EDf91b3a",
       abi: [
         {
           inputs: [],
@@ -111,6 +266,803 @@ const deployedContracts = {
       inheritedFunctions: {
         distributeFunds: "contracts/interfaces/IDispas.sol",
       },
+    },
+    DispasStealth: {
+      address: "0x312ef2A035bA266Ed81e7C6CaC0e6d8929EEF13a",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "announcer",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes32",
+              name: "metadata",
+              type: "bytes32",
+            },
+          ],
+          name: "StealthMetadataRegistered",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "ephemeralAddress",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "StealthTransfer",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "SCHEME_ID",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "STEALTH_ANNOUNCER",
+          outputs: [
+            {
+              internalType: "contract IERC5564Announcer",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+          ],
+          name: "getAnnouncements",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "recipient",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "ephemeralAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct DispasStealth.Announcement[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "getStealthMetadata",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              internalType: "bytes32",
+              name: "metadata",
+              type: "bytes32",
+            },
+          ],
+          name: "registerStealthMetadata",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "ephemeralAddress",
+              type: "address",
+            },
+          ],
+          name: "sendStealthTransfer",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+    ERC5564Announcer: {
+      address: "0x4E581D6a88bc7D60D092673904d961B6b0961A40",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "caller",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "Announcement",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "announce",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        announce: "contracts/interfaces/IERC5564Announcer.sol",
+      },
+    },
+    ERC5564Registry: {
+      address: "0x8653F395983827E05A6625eED4D045e696980D16",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "StealthMetaAddressSet",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+          ],
+          name: "getStealthMetaAddress",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "setStealthMetaAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "signature",
+              type: "bytes",
+            },
+          ],
+          name: "setStealthMetaAddressFor",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+  31337: {
+    Dispas: {
+      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      abi: [
+        {
+          inputs: [],
+          name: "Dispas__InsufficientValue",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "Dispas__TransferFailed",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "Dispas__ZeroAddress",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "Dispas__ZeroAmount",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "totalAmount",
+              type: "uint256",
+            },
+          ],
+          name: "FundsDistributed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "PaymentSent",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "recipient",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct DataTypes.Payment[]",
+              name: "payments",
+              type: "tuple[]",
+            },
+          ],
+          name: "distributeFunds",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {
+        distributeFunds: "contracts/interfaces/IDispas.sol",
+      },
+    },
+    DispasStealth: {
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "announcer",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "DispasStealth__InsufficientValue",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "DispasStealth__InvalidStealthMetaAddress",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "DispasStealth__TransferFailed",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "DispasStealth__ZeroAddress",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "DispasStealth__ZeroAmount",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "InvalidStealthMetaAddress",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "totalAmount",
+              type: "uint256",
+            },
+          ],
+          name: "FundsDistributed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "PaymentSent",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "stealthMetaAddress",
+              type: "bytes",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "StealthPaymentSent",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "STEALTH_ANNOUNCER",
+          outputs: [
+            {
+              internalType: "contract IERC5564Announcer",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "recipient",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct DataTypes.Payment[]",
+              name: "payments",
+              type: "tuple[]",
+            },
+          ],
+          name: "distributeFunds",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "bytes",
+                  name: "stealthMetaAddress",
+                  type: "bytes",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct DispasStealth.StealthPayment[]",
+              name: "payments",
+              type: "tuple[]",
+            },
+          ],
+          name: "distributeStealthFunds",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+    ERC5564Announcer: {
+      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "caller",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "Announcement",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "schemeId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "stealthAddress",
+              type: "address",
+            },
+            {
+              internalType: "bytes",
+              name: "ephemeralPubKey",
+              type: "bytes",
+            },
+            {
+              internalType: "bytes",
+              name: "metadata",
+              type: "bytes",
+            },
+          ],
+          name: "announce",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        announce: "contracts/interfaces/IERC5564Announcer.sol",
+      },
+    },
+    ERC5564Registry: {
+      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "StealthMetaAddressSet",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+          ],
+          name: "getStealthMetaAddress",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+          ],
+          name: "setStealthMetaAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "registrant",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "stealthMetaAddress",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "signature",
+              type: "bytes",
+            },
+          ],
+          name: "setStealthMetaAddressFor",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
     },
   },
 } as const;

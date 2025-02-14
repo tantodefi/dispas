@@ -60,5 +60,12 @@
   "packageManager": "yarn@3.2.3",
   "engines": {
     "node": ">=18.18.0"
+  },
+  "dependencies": {
+    "@lukso/lsp-smart-contracts": "0.10.2",
+    "@openzeppelin/contracts": "4.7.3",
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.8",
+    "next": "^15.1.7"
   }
 }

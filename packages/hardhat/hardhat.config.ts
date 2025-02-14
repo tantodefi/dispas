@@ -24,7 +24,25 @@ const etherscanApiKey = process.env.ETHERSCAN_MAINNET_API_KEY || "DNXJA8RX2Q3VZ4
 const etherscanOptimisticApiKey = process.env.ETHERSCAN_OPTIMISTIC_API_KEY || "RM62RDISS1RH448ZY379NX625ASG1N633R";
 const basescanApiKey = process.env.BASESCAN_API_KEY || "ZZZEIPMT1MNJ8526VV2Y744CA7TNZR64G6";
 
+// Add this for debugging
+console.log("Private key length:", process.env.PRIVATE_KEY?.length);
+
+if (!process.env.PRIVATE_KEY) {
+  console.warn("No PRIVATE_KEY found in .env file, using default hardhat account");
+}
+
 const config: HardhatUserConfig = {
+  external: {
+    contracts: [
+      {
+        artifacts: "node_modules/@lukso/lsp-smart-contracts/artifacts",
+        deploy: "node_modules/@lukso/lsp-smart-contracts/deploy",
+      },
+    ],
+    deployments: {
+      luksoTestnet: ["node_modules/@lukso/lsp-smart-contracts/deployments/mainnet"],
+    },
+  },
   solidity: {
     compilers: [
       {
@@ -33,6 +51,15 @@ const config: HardhatUserConfig = {
           optimizer: {
             enabled: true,
             // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+            runs: 200,
+          },
+        },
+      },
+      {
+        version: "0.8.12",
+        settings: {
+          optimizer: {
+            enabled: true,
             runs: 200,
           },
         },
@@ -60,12 +87,16 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
     lukso: {
-      url: "https://rpc.mainnet.lukso.network",
-      accounts: [deployerPrivateKey],
+      url: "https://rpc.testnet.lukso.network",
+      chainId: 4201,
     },
     luksoTestnet: {
       url: "https://rpc.testnet.lukso.network",
-      accounts: [deployerPrivateKey],
+      chainId: 4201,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : undefined,
+      gasPrice: 1000000000, // 1 gwei
+      gas: 2100000,
+      gasMultiplier: 1.2
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
@@ -166,6 +197,14 @@ const config: HardhatUserConfig = {
     celoAlfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: [deployerPrivateKey],
+    },
+    luksoMainnet: {
+      url: "https://rpc.lukso.sigmacore.io",
+      chainId: 42,
+      accounts: [process.env.PRIVATE_KEY as string],
+      gasPrice: 1000000000, // 1 gwei
+      gas: 2100000,
+      gasMultiplier: 1.2
     },
   },
   // configuration for harhdat-verify plugin

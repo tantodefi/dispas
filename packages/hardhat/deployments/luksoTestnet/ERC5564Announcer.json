@@ -1,0 +1,128 @@
+{
+  "address": "0x4E581D6a88bc7D60D092673904d961B6b0961A40",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "schemeId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "stealthAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "caller",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "ephemeralPubKey",
+          "type": "bytes"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "metadata",
+          "type": "bytes"
+        }
+      ],
+      "name": "Announcement",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "schemeId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "stealthAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "ephemeralPubKey",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "metadata",
+          "type": "bytes"
+        }
+      ],
+      "name": "announce",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x83327a5735c8482776c11333586a2e3ef37871f9f198bb7f871c67f4e408c1bd",
+  "receipt": {
+    "to": null,
+    "from": "0xB632C03F4F7fd78Ebb26E7E4c35e42Eba33E7e0e",
+    "contractAddress": "0x4E581D6a88bc7D60D092673904d961B6b0961A40",
+    "transactionIndex": 0,
+    "gasUsed": "189957",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xe5f1335117ba89ea41741bd1cf19cfc344043cd453e2f78d6cd94d8150baad78",
+    "transactionHash": "0x83327a5735c8482776c11333586a2e3ef37871f9f198bb7f871c67f4e408c1bd",
+    "logs": [],
+    "blockNumber": 4533395,
+    "cumulativeGasUsed": "189957",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "bb96141707f77a5afd8075b8ca012833",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"schemeId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"stealthAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"ephemeralPubKey\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"metadata\",\"type\":\"bytes\"}],\"name\":\"Announcement\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"schemeId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"stealthAddress\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"ephemeralPubKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"metadata\",\"type\":\"bytes\"}],\"name\":\"announce\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"Announcement(uint256,address,address,bytes,bytes)\":{\"details\":\"Emitted when a stealth transfer is announced\",\"params\":{\"caller\":\"The address that called the announce function\",\"ephemeralPubKey\":\"The ephemeral public key used to generate the stealth address\",\"metadata\":\"Additional metadata about the transfer\",\"schemeId\":\"The ID of the stealth address scheme (1 for secp256k1)\",\"stealthAddress\":\"The stealth address where funds were sent\"}}},\"kind\":\"dev\",\"methods\":{\"announce(uint256,address,bytes,bytes)\":{\"details\":\"Announces a stealth transfer\",\"params\":{\"ephemeralPubKey\":\"The ephemeral public key used to generate the stealth address\",\"metadata\":\"Additional metadata about the transfer\",\"schemeId\":\"The ID of the stealth address scheme\",\"stealthAddress\":\"The stealth address where funds were sent\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/protocol/ERC5564Announcer.sol\":\"ERC5564Announcer\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/interfaces/IERC5564Announcer.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\ninterface IERC5564Announcer {\\n    /**\\n     * @dev Emitted when a stealth transfer is announced\\n     * @param schemeId The ID of the stealth address scheme (1 for secp256k1)\\n     * @param stealthAddress The stealth address where funds were sent\\n     * @param caller The address that called the announce function\\n     * @param ephemeralPubKey The ephemeral public key used to generate the stealth address\\n     * @param metadata Additional metadata about the transfer\\n     */\\n    event Announcement(\\n        uint256 indexed schemeId,\\n        address indexed stealthAddress,\\n        address indexed caller,\\n        bytes ephemeralPubKey,\\n        bytes metadata\\n    );\\n\\n    /**\\n     * @dev Announces a stealth transfer\\n     * @param schemeId The ID of the stealth address scheme\\n     * @param stealthAddress The stealth address where funds were sent\\n     * @param ephemeralPubKey The ephemeral public key used to generate the stealth address\\n     * @param metadata Additional metadata about the transfer\\n     */\\n    function announce(\\n        uint256 schemeId,\\n        address stealthAddress,\\n        bytes memory ephemeralPubKey,\\n        bytes memory metadata\\n    ) external;\\n} \",\"keccak256\":\"0x000713001fc429ddff0d2e656149b28f2ddc3a07ffbc251eb87e796fdbca4a93\",\"license\":\"MIT\"},\"contracts/protocol/ERC5564Announcer.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\nimport { IERC5564Announcer } from \\\"../interfaces/IERC5564Announcer.sol\\\";\\n\\ncontract ERC5564Announcer is IERC5564Announcer {\\n    function announce(\\n        uint256 schemeId,\\n        address stealthAddress,\\n        bytes memory ephemeralPubKey,\\n        bytes memory metadata\\n    ) external {\\n        emit Announcement(\\n            schemeId,\\n            stealthAddress,\\n            msg.sender,\\n            ephemeralPubKey,\\n            metadata\\n        );\\n    }\\n} \",\"keccak256\":\"0x22b9788c5ced4f7db3ac22d0cbe2c9cf3bec0ed2d382613d3ba28dca1bc9b779\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b506102798061001f6000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c80634d1f958314610030575b600080fd5b61004361003e36600461013e565b610045565b005b336001600160a01b0316836001600160a01b0316857f5f0eab8057630ba7676c49b4f21a0231414e79474595be8e4c432fbf6bf0f4e7858560405161008b929190610215565b60405180910390a450505050565b634e487b7160e01b600052604160045260246000fd5b600082601f8301126100c057600080fd5b813567ffffffffffffffff8111156100da576100da610099565b604051601f8201601f19908116603f0116810167ffffffffffffffff8111828210171561010957610109610099565b60405281815283820160200185101561012157600080fd5b816020850160208301376000918101602001919091529392505050565b6000806000806080858703121561015457600080fd5b8435935060208501356001600160a01b038116811461017257600080fd5b9250604085013567ffffffffffffffff81111561018e57600080fd5b61019a878288016100af565b925050606085013567ffffffffffffffff8111156101b757600080fd5b6101c3878288016100af565b91505092959194509250565b6000815180845260005b818110156101f5576020818501810151868301820152016101d9565b506000602082860101526020601f19601f83011685010191505092915050565b60408152600061022860408301856101cf565b828103602084015261023a81856101cf565b9594505050505056fea26469706673582212203cef058ad3a8899699427c87b47ddc77215f0ae9a04345f4abd1fec10b1b77ee64736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c80634d1f958314610030575b600080fd5b61004361003e36600461013e565b610045565b005b336001600160a01b0316836001600160a01b0316857f5f0eab8057630ba7676c49b4f21a0231414e79474595be8e4c432fbf6bf0f4e7858560405161008b929190610215565b60405180910390a450505050565b634e487b7160e01b600052604160045260246000fd5b600082601f8301126100c057600080fd5b813567ffffffffffffffff8111156100da576100da610099565b604051601f8201601f19908116603f0116810167ffffffffffffffff8111828210171561010957610109610099565b60405281815283820160200185101561012157600080fd5b816020850160208301376000918101602001919091529392505050565b6000806000806080858703121561015457600080fd5b8435935060208501356001600160a01b038116811461017257600080fd5b9250604085013567ffffffffffffffff81111561018e57600080fd5b61019a878288016100af565b925050606085013567ffffffffffffffff8111156101b757600080fd5b6101c3878288016100af565b91505092959194509250565b6000815180845260005b818110156101f5576020818501810151868301820152016101d9565b506000602082860101526020601f19601f83011685010191505092915050565b60408152600061022860408301856101cf565b828103602084015261023a81856101cf565b9594505050505056fea26469706673582212203cef058ad3a8899699427c87b47ddc77215f0ae9a04345f4abd1fec10b1b77ee64736f6c634300081c0033",
+  "devdoc": {
+    "events": {
+      "Announcement(uint256,address,address,bytes,bytes)": {
+        "details": "Emitted when a stealth transfer is announced",
+        "params": {
+          "caller": "The address that called the announce function",
+          "ephemeralPubKey": "The ephemeral public key used to generate the stealth address",
+          "metadata": "Additional metadata about the transfer",
+          "schemeId": "The ID of the stealth address scheme (1 for secp256k1)",
+          "stealthAddress": "The stealth address where funds were sent"
+        }
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "announce(uint256,address,bytes,bytes)": {
+        "details": "Announces a stealth transfer",
+        "params": {
+          "ephemeralPubKey": "The ephemeral public key used to generate the stealth address",
+          "metadata": "Additional metadata about the transfer",
+          "schemeId": "The ID of the stealth address scheme",
+          "stealthAddress": "The stealth address where funds were sent"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}
