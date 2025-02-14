@@ -2,6 +2,9 @@
 
 Dispas implements ERC-5564 stealth addresses integrated with LUKSO Universal Profiles, allowing private payments while maintaining the benefits of account abstraction.
 
+https://dispastealth.vercel.app/
+
+https://dispastealth.vercel.app/register-stealth
 
 testnet deployment:
 ```
